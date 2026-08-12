@@ -1,8 +1,19 @@
 # Rope Access Center (RAC) — Website Training Center & Jasa Perawatan Gedung
 
-Rencana lengkap: @docs/PLAN.md — baca bab yang relevan sebelum mengerjakan fitur.
-Tugas per sesi: @docs/PLAYBOOK.md · Visual: @docs/DESIGN-SYSTEM.md
-Keputusan: @docs/DECISIONS.md · **Semua nilai faktual: @docs/FAKTA-BISNIS.md**
+Baca **hanya bagian yang relevan** dengan tugas — jangan muat seluruhnya:
+
+- `docs/PLAN.md` — rencana induk, rujuk per bab
+- `docs/PLAYBOOK.md` — prompt per tugas (T-1xx…T-4xx)
+- `docs/DESIGN-SYSTEM.md` — sumber kebenaran warna, tipografi, komponen
+- `docs/DECISIONS.md` — kenapa sesuatu diputuskan begitu (D-xx, ADR-xxx)
+
+**Semua nilai faktual — angka, nomor, harga, nama:** @docs/FAKTA-BISNIS.md
+
+> Empat file pertama sengaja **tidak** memakai `@`. Sintaks `@` meng-*import* isi file ke
+> konteks setiap sesi; keempatnya berjumlah ~4.800 baris dan akan menghabiskan puluhan ribu
+> token sebelum pekerjaan dimulai — persis anti-pola di PLAN Bab 16.5, yang membuat aturan
+> penting tenggelam. Hanya FAKTA-BISNIS.md yang di-import, karena kecil dan justru harus
+> selalu ada untuk mencegah pengarangan fakta.
 
 ## Perintah
 
@@ -63,7 +74,7 @@ Keputusan: @docs/DECISIONS.md · **Semua nilai faktual: @docs/FAKTA-BISNIS.md**
 - **Tunjukkan output test sebagai bukti. Jangan menyatakan "sudah selesai"
   tanpa memperlihatkan hasilnya.** Kalau ada yang gagal, katakan gagal.
 - Jangan menonaktifkan test atau menurunkan ambang supaya lulus. Laporkan.
-- Setelah tugas selesai: TULIS LOG PEKERJAAN — @.claude/skills/worklog/SKILL.md
+- Setelah tugas selesai: TULIS LOG PEKERJAAN — skill `worklog`
 - Commit atomik, format Conventional Commits.
 
 ## Batas peran
@@ -71,9 +82,9 @@ Keputusan: @docs/DECISIONS.md · **Semua nilai faktual: @docs/FAKTA-BISNIS.md**
 Claude Code menulis kode, struktur, dan kejelasan bahasa.
 Claude Code **bukan** sumber fakta untuk: regulasi Indonesia, nomor pasal,
 harga, prosedur keselamatan, atau data lapangan perusahaan.
-Setiap klaim faktual harus tertelusur ke @docs/FAKTA-BISNIS.md atau sumber
+Setiap klaim faktual harus tertelusur ke `docs/FAKTA-BISNIS.md` atau sumber
 resmi yang ditautkan. Kalau tidak ada sumbernya, tandai `[SUMBER?]`.
-Lihat @.claude/skills/content-writer/SKILL.md.
+Lihat skill `content-writer`.
 
 ## Bahasa
 

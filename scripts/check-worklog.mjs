@@ -26,14 +26,31 @@ function todayStamp() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
+function sh(cmd) {
+  return execSync(cmd, {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'ignore'],
+  }).trim();
+}
+
+/**
+ * Apakah ada pekerjaan di sesi ini yang perlu dicatat?
+ *
+ * Dua sinyal, karena satu saja tidak cukup:
+ *   1. Pohon kerja kotor — ada perubahan belum di-commit.
+ *   2. Ada commit baru hari ini.
+ *
+ * Sinyal kedua wajib ada. Tanpanya, alur normal yang justru diperintahkan
+ * PLAYBOOK ("commit → push → PR → selesai") akan melewati penegakan ini
+ * sepenuhnya: begitu commit dibuat, pohon kerja bersih dan hook lolos diam-diam.
+ * Hook yang hanya menangkap kasus "edit lalu berhenti tanpa commit" menjaga
+ * justru kasus yang paling jarang terjadi.
+ */
 function hasChanges() {
   try {
-    const tracked = execSync('git status --porcelain', {
-      cwd: ROOT,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
-    return tracked.length > 0;
+    if (sh('git status --porcelain').length > 0) return true;
+    return sh('git log --since="12 hours ago" --oneline').length > 0;
   } catch {
     // Bukan repo git, atau git tidak tersedia. Jangan memblokir karena alasan ini.
     return false;

@@ -147,8 +147,9 @@ for (const dir of rules.scanDirs) {
     filesScanned++;
     checkFilename(rel);
 
+    // Gambar biner tidak perlu dibaca isinya — nama filenya sudah dicek di atas.
+    // SVG adalah pengecualian: formatnya teks, dan justru itulah format logo.
     const ext = extname(rel).toLowerCase();
-    if (rules.imageExtensions.includes(ext) && ext !== '.svg') return; // biner, tak perlu dibaca
     if (!rules.scanExtensions.includes(ext)) return;
 
     let text;

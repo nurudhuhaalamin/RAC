@@ -1347,8 +1347,17 @@ File `CLAUDE.md` yang terlalu panjang membuat Claude mengabaikan sebagian instru
 ```markdown
 # Website Training Center Rope Access
 
-Rencana lengkap: @docs/PLAN.md — baca bagian yang relevan sebelum mengerjakan fitur.
-Keputusan arsitektur: @docs/DECISIONS.md
+Baca HANYA bagian yang relevan dengan tugas — jangan muat seluruhnya:
+- `docs/PLAN.md` — rencana induk, rujuk per bab
+- `docs/DECISIONS.md` — keputusan arsitektur
+
+Semua nilai faktual: @docs/FAKTA-BISNIS.md
+
+> ⚠️ Perhatikan: file besar sengaja TIDAK memakai `@`. Sintaks `@` meng-*import* isi
+> file ke konteks SETIAP sesi. PLAN + PLAYBOOK + DESIGN-SYSTEM berjumlah ~4.800 baris —
+> meng-import-nya menghabiskan puluhan ribu token sebelum pekerjaan dimulai, dan itu
+> persis anti-pola di Bab 16.5 yang membuat aturan penting tenggelam. Hanya file kecil
+> yang harus selalu ada (FAKTA-BISNIS) yang di-import.
 
 ## Perintah
 - `pnpm dev` — server pengembangan
@@ -1389,7 +1398,7 @@ Keputusan arsitektur: @docs/DECISIONS.md
 - Plan mode dulu untuk perubahan multi-file.
 - Setelah menulis kode: jalankan typecheck, test, dan build. Perbaiki kegagalan.
 - Tunjukkan output test sebagai bukti, jangan hanya menyatakan berhasil.
-- Setelah tugas selesai: TULIS LOG PEKERJAAN. Lihat @.claude/skills/worklog/SKILL.md
+- Setelah tugas selesai: TULIS LOG PEKERJAAN. Lihat skill `worklog`.
 - Commit atomik. Format Conventional Commits.
 
 ## Bahasa

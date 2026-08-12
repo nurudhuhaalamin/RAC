@@ -40,6 +40,19 @@ Log yang bertele-tele tidak akan dibaca, dan log yang tidak dibaca tidak berguna
 **Commit:** `<hash pendek>` — `<pesan commit>`
 ```
 
+### Catatan tentang baris Commit
+
+Sebuah entri log **tidak bisa memuat hash commit yang memuat entri itu sendiri** — menuliskan
+hash lalu meng-`amend` akan mengubah hashnya lagi, dan begitu seterusnya.
+
+Dua cara yang benar, pilih salah satu:
+
+- **Tulis pesan commit-nya saja**, tanpa hash. `git log` sudah memetakan pesan ke hash.
+- **Isi hash di entri berikutnya**, merujuk ke commit sebelumnya yang sudah final.
+
+Jangan pernah menuliskan hash hasil tebakan atau hash yang belum final. Log ini jejak audit —
+rujukan yang menunjuk commit tidak ada lebih buruk daripada tidak ada rujukan sama sekali.
+
 ## Aturan tambahan
 
 - **JANGAN PERNAH** menulis nilai rahasia, kredensial, atau data pribadi nyata di log.

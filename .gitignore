@@ -1,0 +1,49 @@
+# Rahasia — JANGAN PERNAH di-commit
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+
+# Dependensi
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+.astro/
+.output/
+.vercel/
+
+# Cloudflare
+.wrangler/
+
+# Database lokal
+*.sqlite
+*.sqlite3
+*.db
+local.db
+
+# Test & laporan
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Log
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Sementara
+*.local
+tmp/
+.tmp/

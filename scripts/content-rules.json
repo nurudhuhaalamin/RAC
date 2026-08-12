@@ -1,0 +1,81 @@
+{
+  "_comment": "Aturan validator konten. Penegakan D-05 (PLAN Bab 3), D-12, dan amandemen A-09. Longgarkan file ini HANYA dengan alasan tertulis — mengubah daftar putih supaya build hijau adalah cara paling mudah membocorkan aturan yang justru berisiko hukum.",
+
+  "scanDirs": ["src", "public", "db/seed"],
+  "scanExtensions": [".astro", ".ts", ".tsx", ".js", ".jsx", ".md", ".mdx", ".json", ".html", ".svg"],
+  "_scanExtensions_note": ".svg WAJIB ada di sini. SVG adalah format teks, dan justru format yang dipakai logo — SVG berisi <title>IRATA Certified</title> harus tertangkap.",
+  "ignorePaths": [
+    "node_modules",
+    "dist",
+    ".astro",
+    ".wrangler",
+    "src/env.d.ts"
+  ],
+
+  "restrictedEntities": ["IRATA", "SPRAT", "Petzl", "IRSM", "ISO 9001"],
+
+  "whitelist": [
+    {
+      "path": "src/pages/pelatihan/rencana-irata-sprat.astro",
+      "reason": "Halaman roadmap resmi — D-05 mengizinkan konteks 'rencana/persiapan'"
+    },
+    {
+      "path": "src/pages/en/training/irata-sprat-roadmap.astro",
+      "reason": "Versi EN halaman roadmap"
+    },
+    {
+      "path": "src/content/artikel/perbedaan-irata-sprat-bnsp-kemnaker.mdx",
+      "reason": "Artikel komparatif edukatif netral — D-05 mengizinkan"
+    },
+    {
+      "path": "src/lib/i18n/dictionaries",
+      "reason": "Kamus i18n memuat label halaman roadmap"
+    }
+  ],
+
+  "forbiddenPhrases": [
+    "sertifikasi IRATA",
+    "sertifikat IRATA",
+    "bersertifikat IRATA",
+    "training IRATA",
+    "pelatihan IRATA",
+    "kursus IRATA",
+    "IRATA Level",
+    "sertifikasi SPRAT",
+    "sertifikat SPRAT",
+    "bersertifikat SPRAT",
+    "training SPRAT",
+    "pelatihan SPRAT",
+    "kursus SPRAT",
+    "SPRAT Level",
+    "IRATA certification",
+    "IRATA certified",
+    "IRATA training",
+    "SPRAT certification",
+    "SPRAT certified",
+    "SPRAT training",
+    "Petzl technical partner",
+    "technical partner Petzl",
+    "mitra teknis Petzl",
+    "Petzl partner",
+    "IRSM Approved",
+    "ISO 9001:2015 certified",
+    "bersertifikat ISO 9001",
+    "tersertifikasi ISO 9001"
+  ],
+
+  "forbiddenFilenameFragments": [
+    "irata",
+    "sprat",
+    "petzl",
+    "irsm",
+    "iso9001",
+    "iso-9001"
+  ],
+
+  "imageExtensions": [".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg", ".gif"],
+
+  "checkImageAlt": true,
+  "checkRawImgTag": false,
+  "_checkRawImgTag_note": "Diaktifkan di T-217, setelah komponen Image.astro ada. Sebelum itu, mengaktifkannya akan menggagalkan build tanpa ada penggantinya."
+}

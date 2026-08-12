@@ -1,0 +1,16 @@
+{
+  "name": "rac-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Website Rope Access Center (RAC) — Training Center & Jasa Perawatan Gedung",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "check:content": "node scripts/check-content.mjs",
+    "check:worklog": "node scripts/check-worklog.mjs"
+  },
+  "_scaffoldNote": "PERINGATAN UNTUK T-101 (ADR-007): file ini dibuat lebih dulu di T-102 supaya validator bisa jalan sebelum ada Astro. `pnpm create astro` cenderung MENIMPA package.json. Setelah scaffold, VERIFIKASI bahwa script check:content dan check:worklog masih ada, dan tambahkan sisanya sesuai PLAN.md Lampiran A: dev, build, preview, typecheck, lint, test, test:e2e, lighthouse, db:generate, db:migrate:local, db:studio, db:seed."
+}

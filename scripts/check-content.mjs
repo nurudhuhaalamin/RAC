@@ -33,9 +33,7 @@ const toPosix = (p) => p.split(sep).join('/');
 
 /** Apakah path ini masuk daftar abaikan? */
 function isIgnored(relPath) {
-  return rules.ignorePaths.some(
-    (ig) => relPath === ig || relPath.startsWith(`${ig}/`)
-  );
+  return rules.ignorePaths.some((ig) => relPath === ig || relPath.startsWith(`${ig}/`));
 }
 
 /**
@@ -43,9 +41,7 @@ function isIgnored(relPath) {
  * Cocok kalau path sama persis, atau berada di bawah direktori yang di-whitelist.
  */
 function isWhitelisted(relPath) {
-  return rules.whitelist.some(
-    (w) => relPath === w.path || relPath.startsWith(`${w.path}/`)
-  );
+  return rules.whitelist.some((w) => relPath === w.path || relPath.startsWith(`${w.path}/`));
 }
 
 function walk(dir, onFile) {
@@ -168,7 +164,9 @@ if (violations.length === 0) {
   process.exit(0);
 }
 
-console.error(`\n❌ check:content GAGAL — ${violations.length} pelanggaran di ${filesScanned} file dipindai.\n`);
+console.error(
+  `\n❌ check:content GAGAL — ${violations.length} pelanggaran di ${filesScanned} file dipindai.\n`
+);
 
 const byFile = new Map();
 for (const v of violations) {
@@ -187,8 +185,8 @@ for (const [file, vs] of byFile) {
 
 console.error(
   'Aturan ini menyangkut risiko hukum dan reputasi, bukan gaya penulisan.\n' +
-  'Baca docs/PLAN.md Bab 3 (D-05) dan docs/DECISIONS.md (D-12).\n' +
-  'JANGAN melonggarkan scripts/content-rules.json supaya build hijau — perbaiki kontennya.\n'
+    'Baca docs/PLAN.md Bab 3 (D-05) dan docs/DECISIONS.md (D-12).\n' +
+    'JANGAN melonggarkan scripts/content-rules.json supaya build hijau — perbaiki kontennya.\n'
 );
 
 process.exit(1);

@@ -78,7 +78,9 @@ function block(reason) {
 }
 
 if (!existsSync(logPath)) {
-  block(`Log pekerjaan belum ditulis: ${logRel} tidak ada, padahal ada perubahan file di sesi ini.`);
+  block(
+    `Log pekerjaan belum ditulis: ${logRel} tidak ada, padahal ada perubahan file di sesi ini.`
+  );
 }
 
 const ageMinutes = (Date.now() - statSync(logPath).mtimeMs) / 60000;

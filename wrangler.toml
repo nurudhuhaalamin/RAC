@@ -1,0 +1,45 @@
+#:schema node_modules/wrangler/config-schema.json
+# Konfigurasi Cloudflare — Rope Access Center (RAC)
+#
+# ⚠️ SEMUA id di bawah adalah PLACEHOLDER. Isi dengan nilai asli dari akun Anda:
+#     wrangler d1 create rac-db
+#     wrangler kv namespace create CACHE
+#     wrangler r2 bucket create rac-media
+# Catat hasilnya di docs/FAKTA-BISNIS.md Bab 10 (nama/id saja, BUKAN rahasia).
+
+name = "rac-website"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+# `main` dan [assets] sengaja TIDAK diset: adapter @astrojs/cloudflare yang
+# menentukan entry worker dan direktori aset saat build. Menuliskannya di sini
+# membuat plugin Vite mencari file hasil build yang belum ada saat build dimulai.
+
+[observability]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rac-db"
+database_id = "PLACEHOLDER-ISI-DENGAN-ID-ASLI"
+migrations_dir = "db/migrations"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "PLACEHOLDER-ISI-DENGAN-ID-ASLI"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "rac-media"
+
+[vars]
+PUBLIC_SITE_NAME = "Rope Access Center"
+
+# Secrets — JANGAN ditulis di sini. Pasang lewat `wrangler secret put <NAMA>`:
+#   TURNSTILE_SECRET_KEY, RESEND_API_KEY, IP_HASH_SALT, CLOUDFLARE_API_TOKEN
+# Untuk pengembangan lokal, nilainya di .dev.vars (tidak di-commit).
+
+# Cron Triggers — diaktifkan di T-311 (Fase 3). Sengaja dikosongkan sekarang
+# supaya tidak ada jadwal yang jalan sebelum handler-nya ada.
+# [triggers]
+# crons = []

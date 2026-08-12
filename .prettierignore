@@ -1,0 +1,13 @@
+dist/
+.astro/
+.wrangler/
+node_modules/
+db/migrations/
+pnpm-lock.yaml
+playwright-report/
+test-results/
+public/fonts/
+docs/
+CLAUDE.md
+README.md
+.claude/

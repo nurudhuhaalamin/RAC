@@ -1,0 +1,19 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "exclude": ["dist", "node_modules", ".wrangler"],
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["@types/node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@db/*": ["db/*"]
+    }
+  }
+}

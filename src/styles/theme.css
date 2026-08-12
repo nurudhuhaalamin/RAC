@@ -1,0 +1,7 @@
+/* Token desain — diisi di T-104 dari docs/DESIGN-SYSTEM.md Bab 3.
+   Sementara hanya token yang dipakai global.css agar build tidak gagal. */
+@theme {
+  --color-brand-900: #0d1b2a;
+  --color-accent-500: #e30613;
+  --color-neutral-0: #ffffff;
+}

@@ -1,0 +1,46 @@
+---
+/**
+ * Beranda ID — placeholder T-105. Diganti seluruhnya di T-206.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import Heading from '../components/ui/Heading.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import {
+  educationalOrganization,
+  graph,
+  localBusiness,
+  organization,
+  website,
+} from '../lib/seo/schema';
+import { organizationData, schemaContext } from '../lib/seo/site';
+
+export const prerender = false;
+
+const ctx = schemaContext(Astro.site);
+const jsonLd = graph([
+  organization(ctx, organizationData),
+  website(ctx),
+  educationalOrganization(ctx, organizationData),
+  localBusiness(ctx, organizationData),
+]);
+---
+
+<BaseLayout
+  title="Rope Access Center — Pelatihan & Sertifikasi Kerja Ketinggian"
+  description="TODO: meta description beranda. Diisi di T-206 setelah positioning final."
+  noindex
+  jsonLd={jsonLd}
+>
+  <Section tone="inverse">
+    <Container>
+      <Eyebrow tone="on-dark">Safe Access. Higher Standard.</Eyebrow>
+      <Heading level={1} size="5xl" tone="inverse" class="mt-3"> TODO: headline beranda </Heading>
+      <p class="text-brand-200 mt-6 max-w-2xl text-base">
+        Halaman ini masih kerangka. Isi sungguhan dibangun di T-206, setelah lembar verifikasi
+        statistik (D-13) dan status LSP (D-19) terisi di docs/FAKTA-BISNIS.md.
+      </p>
+    </Container>
+  </Section>
+</BaseLayout>

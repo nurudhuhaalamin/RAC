@@ -1,0 +1,70 @@
+---
+/**
+ * Pembungkus field form: label, deskripsi, pesan error.
+ *
+ * Aturan aksesibilitas (PLAN Bab 11.3):
+ *  - <label> terhubung ke kontrol lewat `for`
+ *  - Pesan error terhubung lewat aria-describedby
+ *  - Error diumumkan pembaca layar lewat role="alert"
+ */
+interface Props {
+  id: string;
+  label: string;
+  required?: boolean;
+  description?: string;
+  error?: string;
+  class?: string;
+}
+const {
+  id,
+  label,
+  required = false,
+  description,
+  error,
+  class: className = '',
+} = Astro.props as Props;
+---
+
+<div class:list={['flex flex-col gap-1.5', className]}>
+  <label for={id} class="font-body text-brand-900 text-sm font-semibold">
+    {label}
+    {
+      required && (
+        <span class="text-danger ml-0.5" aria-hidden="true">
+          *
+        </span>
+      )
+    }
+    {required && <span class="sr-only">(wajib diisi)</span>}
+  </label>
+
+  {
+    description && (
+      <p id={`${id}-desc`} class="font-body text-xs text-neutral-600">
+        {description}
+      </p>
+    )
+  }
+
+  {
+    /*
+    Astro tidak mendukung render-prop seperti React: nilai tidak bisa diteruskan
+    ke dalam <slot>. Pemanggil WAJIB meneruskan `describedBy` sendiri ke kontrol.
+    Nilainya dapat dihitung dengan helper `fieldDescribedBy(id, ...)` di bawah,
+    dan konsistensinya dijaga test di FormField.test.ts.
+  */
+  }
+  <slot />
+
+  {
+    error && (
+      <p
+        id={`${id}-error`}
+        role="alert"
+        class="font-body text-danger flex items-start gap-1 text-xs"
+      >
+        {error}
+      </p>
+    )
+  }
+</div>

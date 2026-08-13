@@ -1,0 +1,44 @@
+---
+/**
+ * Judul dengan level semantik yang TERPISAH dari ukuran visual.
+ * Hierarki heading tidak boleh melompat demi tampilan — itu merusak
+ * navigasi pembaca layar dan SEO (PLAN Bab 8.2).
+ */
+interface Props {
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  size?: 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  tone?: 'default' | 'inverse';
+  /** Garis aksen merah di bawah judul seksi (DESIGN-SYSTEM Bab 3.1). */
+  accentRule?: boolean;
+  class?: string;
+}
+const {
+  level,
+  size = '2xl',
+  tone = 'default',
+  accentRule = false,
+  class: className = '',
+} = Astro.props as Props;
+
+const Tag = `h${level}` as 'h1';
+const sizes = {
+  xl: 'text-xl',
+  '2xl': 'text-2xl lg:text-3xl',
+  '3xl': 'text-3xl lg:text-4xl',
+  '4xl': 'text-4xl lg:text-5xl',
+  '5xl': 'text-5xl lg:text-6xl',
+  '6xl': 'text-5xl lg:text-6xl',
+} as const;
+---
+
+<Tag
+  class:list={[
+    'font-display leading-tight',
+    sizes[size],
+    tone === 'inverse' ? 'text-neutral-0' : 'text-brand-900',
+    className,
+  ]}
+>
+  <slot />
+</Tag>
+{accentRule && <div class="bg-accent-500 mt-4 h-[3px] w-12" aria-hidden="true" />}

@@ -1,0 +1,22 @@
+---
+/** Pembungkus spasi vertikal + varian latar (DESIGN-SYSTEM Bab 3.1). */
+interface Props {
+  tone?: 'base' | 'subtle' | 'inverse';
+  spacing?: 'sm' | 'md' | 'lg';
+  id?: string;
+  class?: string;
+}
+const { tone = 'base', spacing = 'md', id, class: className = '' } = Astro.props as Props;
+
+const tones = {
+  base: 'bg-surface-base text-brand-900',
+  subtle: 'bg-surface-subtle text-brand-900',
+  inverse: 'bg-brand-900 text-neutral-0',
+} as const;
+
+const spacings = { sm: 'py-12', md: 'py-16 lg:py-24', lg: 'py-24 lg:py-32' } as const;
+---
+
+<section id={id} class:list={[tones[tone], spacings[spacing], className]} data-tone={tone}>
+  <slot />
+</section>

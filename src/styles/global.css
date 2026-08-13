@@ -1,0 +1,68 @@
+@import 'tailwindcss';
+
+/* Token desain diisi di T-104 dari docs/DESIGN-SYSTEM.md Bab 3. */
+@import './theme.css';
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Cincin fokus TIDAK BOLEH dihapus — CLAUDE.md aturan 10, DESIGN-SYSTEM Bab 7. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+  }
+
+  /* Titik sentuh minimal 44x44 px. */
+  a,
+  button,
+  [role='button'],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  /* Elemen inline dalam prosa dikecualikan — memaksa 44px pada tautan di
+     tengah paragraf akan merusak line-height teks. */
+  p a,
+  li a,
+  .prose a {
+    min-height: 0;
+  }
+}
+
+/* ── prefers-reduced-motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Skip link ─────────────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-brand-900);
+  color: var(--color-neutral-0);
+}
+.skip-link:focus {
+  left: 0;
+}

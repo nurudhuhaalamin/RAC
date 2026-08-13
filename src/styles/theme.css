@@ -1,0 +1,142 @@
+/**
+ * Token desain — Rope Access Center (RAC)
+ *
+ * Blok warna di bawah disalin PERSIS dari docs/DESIGN-SYSTEM.md Bab 3.
+ * JANGAN mengubah, menambah, atau menghapus satu token pun tanpa memperbarui
+ * dokumen itu lebih dulu. Skala warna sudah dihitung — jangan mengarang sendiri
+ * dari nilai hex brand guide.
+ *
+ * Tabel aturan pemakaian (konteks -> token) ada di DESIGN-SYSTEM Bab 3.1 dan
+ * diimplementasikan sebagai varian komponen, bukan diterapkan ad-hoc per halaman.
+ */
+
+@theme {
+  /* ── BRAND: Navy ───────────────────────────── */
+  --color-brand-50: #f2f5f8;
+  --color-brand-100: #e2e8ef;
+  --color-brand-200: #c5d0de;
+  --color-brand-300: #9aacc2;
+  --color-brand-400: #6b82a0;
+  --color-brand-500: #47607f;
+  --color-brand-600: #2f4763;
+  --color-brand-700: #1e3350;
+  --color-brand-800: #14243b;
+  --color-brand-900: #0d1b2a; /* NAVY — warna brand utama */
+  --color-brand-950: #070e17;
+
+  /* ── ACCENT: Red ───────────────────────────── */
+  --color-accent-50: #fef2f2;
+  --color-accent-100: #fee2e2;
+  --color-accent-200: #fdc9c9;
+  --color-accent-300: #fa9c9c;
+  --color-accent-400: #f45e5e; /* teks merah kecil di latar GELAP */
+  --color-accent-500: #e30613; /* RED — warna brand utama */
+  --color-accent-600: #c4050f; /* hover tombol */
+  --color-accent-700: #a2040d; /* active tombol */
+  --color-accent-800: #7e030a;
+  --color-accent-900: #5c0207;
+
+  /* ── NEUTRAL (dari brand guide) ────────────── */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f2f4f7;
+  --color-neutral-200: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-600: #6b7177;
+  --color-neutral-700: #4b4f56;
+  --color-neutral-900: #222529; /* CHARCOAL */
+
+  /* ── SEMANTIK ──────────────────────────────── */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626; /* JANGAN pakai accent-500 untuk error —
+                                  akan tertukar dengan CTA */
+  --color-info: #2563eb;
+
+  /* ── PERMUKAAN ─────────────────────────────── */
+  --color-surface-base: #ffffff;
+  --color-surface-subtle: #f2f4f7;
+  --color-surface-inverse: #0d1b2a;
+  --color-surface-inverse-2: #14243b; /* kartu di atas latar navy */
+  --color-border-default: #d1d5db;
+  --color-border-inverse: #1e3350;
+
+  /* ── TURUNAN AKSESIBILITAS (amandemen A-13) ──
+     Ditemukan oleh test kontras blocking di src/lib/utils/contrast.test.ts.
+     Token Bab 3 di atas TIDAK diubah — ini tambahan, bukan pengganti.
+
+     Tiga token Bab 3 tidak memenuhi ambang WCAG AA untuk sebagian pemakaian:
+       success #16A34A di putih = 3,30:1  -> gagal teks normal (butuh 4,5)
+       warning #D97706 di putih = 3,19:1  -> gagal teks normal (butuh 4,5)
+       border-default #D1D5DB   = 1,47:1  -> gagal batas KONTROL FORM (butuh 3)
+
+     Nilai asli tetap dipakai untuk isian (badge, latar, ikon besar). Untuk
+     TEKS dan batas kontrol, pakai token di bawah ini. */
+  --color-success-text: #15803d; /* 5,02:1 di putih */
+  --color-warning-text: #b45309; /* 5,02:1 di putih */
+
+  /* Batas untuk input, select, textarea, checkbox — elemen yang batasnya
+     WAJIB terlihat untuk mengenali kontrolnya (WCAG 2.1 SC 1.4.11).
+     border-default tetap boleh untuk pembatas dekoratif dan garis kartu,
+     yang tidak termasuk cakupan 1.4.11. */
+  --color-border-strong: #7c838c; /* 3,83:1 di putih */
+
+  /* Tint latar untuk badge status. Dipasangkan dengan token *-text di atas —
+     bukan dengan token semantik asli, yang kontrasnya tidak cukup sebagai teks. */
+  --color-success-bg: #eaf7ef;
+  --color-success-border: #bfe5cd;
+  --color-warning-bg: #fdf3e7;
+  --color-warning-border: #f5d9b0;
+  --color-info-bg: #eaf1fe;
+  --color-info-border: #c3d8fb;
+
+  /* ── MERK PIHAK KETIGA ──
+     Hijau WhatsApp. Warna merek resmi WhatsApp, dipakai HANYA pada tombol yang
+     benar-benar membuka WhatsApp — pemakaian fungsional, bukan klaim afiliasi.
+     Teks di atasnya memakai brand-950 (bukan putih) karena putih di atas
+     #25D366 hanya 1,8:1 dan gagal WCAG AA. */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1ebe5a;
+
+  /* ── TIPOGRAFI (DESIGN-SYSTEM Bab 4.1) ─────── */
+  --font-display: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Montserrat', system-ui, sans-serif;
+  --font-reading: 'Inter', system-ui, sans-serif; /* isi artikel — D-15 */
+
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1.0625rem; /* 17px — minimum body mobile per PLAN Bab 12 */
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 3.75rem;
+  --text-6xl: 4.5rem;
+
+  /* ── RADIUS & BAYANGAN (PLAN Bab 11.2) ─────── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(13 27 42 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(13 27 42 / 0.1);
+  --shadow-lg: 0 12px 32px -8px rgb(13 27 42 / 0.18);
+
+  /* ── LEBAR BACA (DESIGN-SYSTEM Bab 4.1) ────── */
+  --container-reading: 68ch;
+}
+
+/**
+ * Penyetelan Archivo (DESIGN-SYSTEM Bab 4.2).
+ *
+ * `wdth` 118 adalah titik awal hasil kalibrasi dokumen, BUKAN hasil akhir.
+ * Kalibrasi visual berdampingan dengan wordmark logo dilakukan di cek manual
+ * T-104, lalu angkanya dikunci di sini dan tidak diubah per komponen.
+ */
+@utility font-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 118;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}

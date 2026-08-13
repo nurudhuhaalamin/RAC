@@ -1,0 +1,47 @@
+name: Lighthouse
+
+on:
+  pull_request:
+
+concurrency:
+  group: lh-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lighthouse:
+    name: Anggaran performa
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Siapkan database lokal
+        run: pnpm db:migrate:local && pnpm db:seed
+
+      - name: Build
+        run: pnpm build
+
+      # ADR-005: median dari 3 run. Skor Lighthouse di runner CI bervariasi
+      # +/-5 poin karena beban mesin, bukan karena kode berubah. Gerbang yang
+      # sering merah palsu akan diabaikan orang, lalu berhenti melindungi apa pun.
+      #
+      # Gerbang BLOCKING hanya pada kolom "Batas gagal" PLAN Bab 12.4.
+      # Kolom "Target" dilaporkan sebagai peringatan.
+      # Runner GitHub sudah menyediakan Chrome; CHROME_PATH tidak perlu diset
+      # di sana. Di kontainer tanpa Chrome sistem, arahkan CHROME_PATH ke
+      # Chromium Playwright dan pakai --no-sandbox (sudah di lighthouserc.json).
+      - name: Lighthouse CI
+        run: pnpm lighthouse

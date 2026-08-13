@@ -511,6 +511,7 @@ Tambahkan ke `docs/DECISIONS.md` dan perbarui bagian terkait di PLAN.md.
 | **A-12** | Setiap klaim numerik di situs wajib punya dokumen pendukung yang bisa ditunjukkan dalam 5 menit. Ditambahkan sebagai butir wajib di checklist QA PLAN Bab 19. |
 | **A-07** | Font isi artikel boleh berbeda dari font UI (tunggu D-15). |
 | **A-08** | Header dan drawer mobile wajib memuat pengalih bahasa. |
+| **A-13** | **Tiga token Bab 3 tidak memenuhi WCAG AA untuk sebagian pemakaian** — ditemukan test kontras blocking T-104. `success #16A34A` = 3,30:1 dan `warning #D97706` = 3,19:1 gagal sebagai **teks** (butuh 4,5:1); `border-default #D1D5DB` = 1,47:1 gagal sebagai **batas kontrol form** (butuh 3:1, WCAG 2.1 SC 1.4.11). Palet Bab 3 **tidak diubah** — nilainya tetap sah untuk isian, badge, dan ikon besar. Ditambahkan token turunan: `success-text #15803D` (5,02:1), `warning-text #B45309` (5,02:1), `border-strong #7C838C` (3,83:1), plus tint latar badge dan warna merek WhatsApp. `border-default` tetap dipakai untuk pembatas dekoratif dan garis kartu, yang di luar cakupan 1.4.11. |
 | **A-09** | Validator `check:content` diperluas: gagalkan build kalau menemukan file gambar bernama mengandung `irata`, `sprat`, `petzl`, `irsm`, atau `iso9001` di `public/` maupun `src/`. |
 
 ---
@@ -522,9 +523,9 @@ Tambahkan ke `docs/DECISIONS.md` dan perbarui bagian terkait di PLAN.md.
 | **D-12** | ✅ **TUTUP** — tidak ada hubungan resmi. Kelima logo dihapus total; seksi diganti sesuai Bab 6.6. | — |
 | **D-13** | ⚠️ **SEBAGIAN** — isi lembar verifikasi di Bab 2.2. Angka tanpa dokumen pendukung tidak tayang. | Blokir untuk T-206 |
 | **D-14** | ✅ **TUTUP** — Archivo Expanded, `wdth` 118. Square 721 tidak dibeli. | — |
-| **D-15** | Isi artikel pakai Inter (lebih nyaman dibaca) atau Montserrat (konsisten brand)? | Blokir untuk T-212 |
+| **D-15** | ✅ **TUTUP** — **Inter** untuk isi artikel. Montserrat tetap untuk seluruh antarmuka, judul, dan label. | — |
 | **D-16** | Favicon: monogram "R" untuk ukuran kecil, atau tetap wordmark RAC? | Blokir untuk produksi aset |
-| **D-17** | "E-Learning" muncul di footer mockup — apakah ini layanan yang benar-benar akan ada? | Blokir untuk IA & peta keyword |
+| **D-17** | ✅ **TUTUP** — **tidak ada.** Tidak dibuat menu, halaman, maupun klaster keyword. Footer mockup diabaikan di titik ini. | — |
 | **D-18** | Domain final (mockup menyebut `ropeaccesscenter.com`) — sudah dibeli? | Blokir untuk Fase 0 |
 | **D-19** | Apakah RAC adalah LSP terlisensi BNSP sendiri, atau bermitra dengan LSP lain? | Menentukan sah tidaknya klaim "We Certify" di hero. Blokir untuk T-206 |
 | **D-20** | Nomor lisensi PJK3/K3 Kemnaker sudah terbit? Nomor berapa? | Blokir untuk seksi Bab 6.6 |
@@ -611,3 +612,4 @@ PENGECUALIAN WAJIB berikut:
 | Versi | Tanggal | Perubahan |
 |---|---|---|
 | 1.0 | 11 Agustus 2026 | Audit aset brand, token, spesifikasi komponen, 5 temuan kritis |
+| 1.1 | 12 Agustus 2026 | A-13 ditambahkan: tiga token Bab 3 gagal WCAG AA untuk sebagian pemakaian, ditemukan test kontras blocking T-104. Token turunan ditambahkan tanpa mengubah palet. D-15 (Inter) dan D-17 (tanpa E-Learning) ditutup. |

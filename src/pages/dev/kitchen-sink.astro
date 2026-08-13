@@ -1,0 +1,223 @@
+---
+/**
+ * Halaman pengembangan: memperlihatkan seluruh varian setiap komponen primitif.
+ * WAJIB noindex dan dikecualikan dari sitemap (PLAN Bab 8.2).
+ */
+import '../../styles/global.css';
+import Button from '../../components/ui/Button.astro';
+import Card from '../../components/ui/Card.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import Heading from '../../components/ui/Heading.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import FormField from '../../components/ui/FormField.astro';
+import Input from '../../components/ui/Input.astro';
+import Textarea from '../../components/ui/Textarea.astro';
+import Select from '../../components/ui/Select.astro';
+import { colors } from '../../lib/utils/tokens';
+import { contrastRatioRounded } from '../../lib/utils/contrast';
+import { fieldDescribedBy } from '../../lib/utils/a11y';
+
+export const prerender = false;
+
+const buttonVariants = ['primary', 'secondary', 'ghost', 'whatsapp'] as const;
+const badgeVariants = ['neutral', 'success', 'warning', 'danger', 'info', 'accent'] as const;
+const sizes = ['sm', 'md', 'lg'] as const;
+
+const swatches = [
+  ...Object.entries(colors.brand).map(([k, v]) => [`brand-${k}`, v] as const),
+  ...Object.entries(colors.accent).map(([k, v]) => [`accent-${k}`, v] as const),
+  ...Object.entries(colors.neutral).map(([k, v]) => [`neutral-${k}`, v] as const),
+];
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kitchen Sink — RAC (dev)</title>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class="bg-surface-base text-brand-900 font-body">
+    <a class="skip-link" href="#main">Lewati ke konten</a>
+
+    <Section tone="inverse" spacing="sm">
+      <Container>
+        <Eyebrow tone="on-dark">Halaman Pengembangan</Eyebrow>
+        <Heading level={1} size="4xl" tone="inverse" class="mt-2">Kitchen Sink</Heading>
+        <p class="text-brand-200 mt-4 max-w-2xl">
+          Seluruh varian komponen primitif. Halaman ini noindex dan tidak masuk sitemap.
+        </p>
+      </Container>
+    </Section>
+
+    <main id="main">
+      <Section>
+        <Container>
+          <Eyebrow tone="on-light">Warna</Eyebrow>
+          <Heading level={2} accentRule>Palet</Heading>
+          <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+            {
+              swatches.map(([name, hex]) => (
+                <li class="border-border-default rounded-md border">
+                  <div class="h-16 rounded-t-md" style={`background:${hex}`} />
+                  <div class="p-2">
+                    <p class="text-xs font-semibold">{name}</p>
+                    <p class="text-xs text-neutral-600">{hex}</p>
+                    <p class="text-xs text-neutral-600">
+                      {contrastRatioRounded(hex, '#FFFFFF')}:1 di putih
+                    </p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </Container>
+      </Section>
+
+      <Section tone="subtle">
+        <Container>
+          <Eyebrow tone="on-light">Tipografi</Eyebrow>
+          <Heading level={2} accentRule>Skala</Heading>
+          <div class="mt-8 space-y-4">
+            <Heading level={3} size="6xl">Hero headline</Heading>
+            <Heading level={3} size="4xl">H1 halaman</Heading>
+            <Heading level={3} size="3xl">H2 seksi</Heading>
+            <Heading level={3} size="xl">H3</Heading>
+            <p class="text-base">Body UI 17px — leading relaxed, font Montserrat.</p>
+            <p class="font-reading max-w-[68ch] text-base leading-[1.7]">
+              Isi artikel memakai Inter (D-15), lebar baca maksimal 68 karakter, jarak antarbaris
+              1,7. Montserrat sangat baik untuk antarmuka, tapi melelahkan untuk artikel panjang.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Eyebrow tone="on-light">Tombol</Eyebrow>
+          <Heading level={2} accentRule>Varian &amp; ukuran</Heading>
+          <div class="mt-8 space-y-6">
+            {
+              sizes.map((size) => (
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="w-12 text-xs text-neutral-600">{size}</span>
+                  {buttonVariants.map((variant) => (
+                    <Button variant={variant} size={size}>
+                      {variant}
+                    </Button>
+                  ))}
+                </div>
+              ))
+            }
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="w-12 text-xs text-neutral-600">link</span>
+              <Button href="#main" variant="primary">Sebagai tautan</Button>
+              <Button variant="primary" disabled>Nonaktif</Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section tone="inverse">
+        <Container>
+          <Eyebrow tone="on-dark">Di latar gelap</Eyebrow>
+          <Heading level={2} tone="inverse" accentRule>Varian inverse</Heading>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button variant="primary">Primer</Button>
+            <Button variant="secondary-inverse">Sekunder inverse</Button>
+          </div>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Card tone="inverse">
+              <p class="font-display text-4xl tabular-nums">TODO</p>
+              <p class="text-brand-200 mt-1 text-sm">Statistik menunggu verifikasi D-13</p>
+            </Card>
+            <Card tone="inverse">
+              <p class="text-brand-200 text-sm">Teks sekunder di kartu gelap.</p>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      <Section tone="subtle">
+        <Container>
+          <Eyebrow tone="on-light">Kartu &amp; badge</Eyebrow>
+          <Heading level={2} accentRule>Komponen</Heading>
+          <div class="mt-8 flex flex-wrap gap-2">
+            {badgeVariants.map((v) => <Badge variant={v}>{v}</Badge>)}
+          </div>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Card interactive>
+              <h3 class="font-display text-xl">Kartu interaktif</h3>
+              <p class="mt-2 text-sm text-neutral-700">Hover: naik 4px, garis atas merah muncul.</p>
+            </Card>
+            <Card>
+              <h3 class="font-display text-xl">Kartu biasa</h3>
+              <p class="mt-2 text-sm text-neutral-700">Tanpa efek hover.</p>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container size="narrow">
+          <Eyebrow tone="on-light">Form</Eyebrow>
+          <Heading level={2} accentRule>Kontrol</Heading>
+          <div class="mt-8 space-y-6">
+            <FormField id="ks-nama" label="Nama lengkap" required>
+              <Input id="ks-nama" name="nama" autocomplete="name" placeholder="Nama Anda" />
+            </FormField>
+
+            <FormField
+              id="ks-wa"
+              label="Nomor WhatsApp"
+              required
+              description="Format 08xx atau +62xx"
+            >
+              <Input
+                id="ks-wa"
+                name="wa"
+                type="tel"
+                autocomplete="tel"
+                placeholder="0812..."
+                describedBy={fieldDescribedBy('ks-wa', { description: true })}
+              />
+            </FormField>
+
+            <FormField id="ks-err" label="Contoh field bermasalah" error="Nomor belum terisi.">
+              <Input
+                id="ks-err"
+                name="err"
+                invalid
+                describedBy={fieldDescribedBy('ks-err', { error: true })}
+              />
+            </FormField>
+
+            <FormField id="ks-skema" label="Skema yang diminati">
+              <Select
+                id="ks-skema"
+                name="skema"
+                placeholder="Pilih skema"
+                options={[
+                  { value: 'bnsp', label: 'BNSP' },
+                  { value: 'tkpk', label: 'TKPK' },
+                  { value: 'tkbt', label: 'TKBT' },
+                ]}
+              />
+            </FormField>
+
+            <FormField id="ks-pesan" label="Pesan">
+              <Textarea id="ks-pesan" name="pesan" placeholder="Tulis pesan Anda" />
+            </FormField>
+
+            <FormField id="ks-dis" label="Nonaktif">
+              <Input id="ks-dis" name="dis" disabled value="Tidak bisa diubah" />
+            </FormField>
+          </div>
+        </Container>
+      </Section>
+    </main>
+  </body>
+</html>

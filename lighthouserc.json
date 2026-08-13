@@ -1,0 +1,51 @@
+{
+  "_comment": [
+    "Anggaran performa PLAN Bab 12.4, ditegakkan sesuai ADR-005.",
+    "",
+    "STATUS SEKARANG (T-106): seluruh assertion 'warn' — TIDAK memblokir.",
+    "Dinaikkan jadi 'error' di T-219, sesuai instruksi PLAYBOOK T-106.",
+    "",
+    "Alasan konkret kenapa belum blocking: halaman yang ada baru placeholder",
+    "ber-noindex, sehingga audit 'is-crawlable' gagal dan skor SEO jatuh ke 0,6.",
+    "Itu perilaku yang BENAR — halaman kerangka memang tidak boleh terindeks.",
+    "Menjadikannya blocking sekarang berarti CI merah terus-menerus tanpa ada",
+    "yang bisa diperbaiki, dan gerbang yang selalu merah akan diabaikan orang.",
+    "",
+    "Diukur pada 12 Agu 2026 (median 3 run, halaman placeholder):",
+    "  performance 1.00 | accessibility 1.00 | best-practices 0.96 | seo 0.60",
+    "",
+    "Angka performa ini BELUM bermakna: belum ada foto asli, belum ada font",
+    "self-hosted, belum ada konten sungguhan. Ukur ulang setelah T-217.",
+    "",
+    "Ambang di bawah memakai kolom 'Batas gagal' PLAN Bab 12.4, bukan kolom",
+    "'Target'. Daftar URL diperluas ke 10 URL kunci di T-219."
+  ],
+  "ci": {
+    "collect": {
+      "startServerCommand": "pnpm preview",
+      "startServerReadyPattern": "Ready on",
+      "startServerReadyTimeout": 120000,
+      "url": ["http://localhost:8788/", "http://localhost:8788/en/"],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["warn", { "minScore": 0.95 }],
+        "categories:seo": ["warn", { "minScore": 1 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "total-byte-weight": ["warn", { "maxNumericValue": 819200 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci/reports"
+    }
+  }
+}

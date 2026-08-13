@@ -1,0 +1,36 @@
+---
+/** Kartu. Varian `inverse` untuk kartu di atas latar navy (DESIGN-SYSTEM Bab 3.1). */
+interface Props {
+  tone?: 'default' | 'inverse';
+  /** Efek hover kartu layanan: naik 4px + garis atas merah muncul (Bab 6.4). */
+  interactive?: boolean;
+  as?: 'div' | 'article' | 'li';
+  class?: string;
+}
+const {
+  tone = 'default',
+  interactive = false,
+  as: Tag = 'div',
+  class: className = '',
+} = Astro.props as Props;
+
+const tones = {
+  default: 'bg-surface-base border-border-default',
+  inverse: 'bg-surface-inverse-2 border-border-inverse text-neutral-0',
+} as const;
+---
+
+<Tag
+  class:list={[
+    'relative rounded-md border p-6',
+    tones[tone],
+    interactive &&
+      'transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ' +
+        'before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:rounded-t-md' +
+        'before:bg-accent-500 before:opacity-0 before:transition-opacity hover:before:opacity-100' +
+        'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

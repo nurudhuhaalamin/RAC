@@ -1,0 +1,57 @@
+---
+/**
+ * Breadcrumb visual + schema BreadcrumbList sekaligus.
+ *
+ * Satu sumber data untuk keduanya: breadcrumb visual dan schema tidak akan
+ * pernah menyimpang, yang merupakan pelanggaran pedoman structured data Google.
+ * Schema-nya sendiri di-emit oleh halaman lewat `graph()`, komponen ini
+ * merender bagian visualnya.
+ */
+import { getDictionary, routeLabel, routePath, type Locale } from '../../lib/i18n';
+import type { Crumb } from '../../lib/seo/schema';
+
+interface Props {
+  locale: Locale;
+  /** Remah setelah Beranda. Beranda ditambahkan otomatis. */
+  items: Crumb[];
+  class?: string;
+}
+const { locale, items, class: className = '' } = Astro.props as Props;
+const d = getDictionary(locale);
+
+const crumbs: Crumb[] = [
+  { name: routeLabel('home', locale), path: routePath('home', locale) },
+  ...items,
+];
+---
+
+<nav aria-label={d.common.breadcrumb} class:list={['w-full', className]}>
+  <ol class="font-body flex flex-wrap items-center gap-x-2 text-xs text-neutral-600">
+    {
+      crumbs.map((c, i) => {
+        const isLast = i === crumbs.length - 1;
+        return (
+          <li class="flex items-center gap-x-2">
+            {isLast ? (
+              <span aria-current="page" class="text-brand-900 font-semibold">
+                {c.name}
+              </span>
+            ) : (
+              <a
+                href={c.path}
+                class="hover:text-brand-900 focus-visible:outline-accent-500 inline-flex min-h-11 items-center focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {c.name}
+              </a>
+            )}
+            {!isLast && (
+              <span aria-hidden="true" class="text-neutral-400">
+                /
+              </span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

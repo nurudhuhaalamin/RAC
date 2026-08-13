@@ -1,0 +1,32 @@
+---
+/**
+ * Badge status.
+ *
+ * ⚠️ Varian teks memakai token *-text (A-13), bukan token semantik asli:
+ * success #16A34A dan warning #D97706 gagal WCAG AA sebagai teks.
+ */
+interface Props {
+  variant?: 'neutral' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
+  class?: string;
+}
+const { variant = 'neutral', class: className = '' } = Astro.props as Props;
+
+const variants = {
+  neutral: 'bg-neutral-50 text-neutral-700 border-neutral-200',
+  success: 'bg-success-bg text-success-text border-success-border',
+  warning: 'bg-warning-bg text-warning-text border-warning-border',
+  danger: 'bg-accent-50 text-danger border-accent-200',
+  info: 'bg-info-bg text-info border-info-border',
+  accent: 'bg-accent-500 text-neutral-0 border-accent-500',
+} as const;
+---
+
+<span
+  class:list={[
+    'font-body inline-flex items-center rounded-sm border px-2.5 py-1 text-xs font-semibold',
+    variants[variant],
+    className,
+  ]}
+>
+  <slot />
+</span>

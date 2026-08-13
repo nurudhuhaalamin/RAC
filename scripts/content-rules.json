@@ -2,15 +2,20 @@
   "_comment": "Aturan validator konten. Penegakan D-05 (PLAN Bab 3), D-12, dan amandemen A-09. Longgarkan file ini HANYA dengan alasan tertulis — mengubah daftar putih supaya build hijau adalah cara paling mudah membocorkan aturan yang justru berisiko hukum.",
 
   "scanDirs": ["src", "public", "db/seed"],
-  "scanExtensions": [".astro", ".ts", ".tsx", ".js", ".jsx", ".md", ".mdx", ".json", ".html", ".svg"],
-  "_scanExtensions_note": ".svg WAJIB ada di sini. SVG adalah format teks, dan justru format yang dipakai logo — SVG berisi <title>IRATA Certified</title> harus tertangkap.",
-  "ignorePaths": [
-    "node_modules",
-    "dist",
+  "scanExtensions": [
     ".astro",
-    ".wrangler",
-    "src/env.d.ts"
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".md",
+    ".mdx",
+    ".json",
+    ".html",
+    ".svg"
   ],
+  "_scanExtensions_note": ".svg WAJIB ada di sini. SVG adalah format teks, dan justru format yang dipakai logo — SVG berisi <title>IRATA Certified</title> harus tertangkap.",
+  "ignorePaths": ["node_modules", "dist", ".astro", ".wrangler", "src/env.d.ts"],
 
   "restrictedEntities": ["IRATA", "SPRAT", "Petzl", "IRSM", "ISO 9001"],
 
@@ -30,6 +35,10 @@
     {
       "path": "src/lib/i18n/dictionaries",
       "reason": "Kamus i18n memuat label halaman roadmap"
+    },
+    {
+      "path": "src/lib/i18n/routes.ts",
+      "reason": "Peta rute memuat SLUG halaman roadmap (`pelatihan/rencana-irata-sprat`), dan slug itu diwajibkan PLAN Bab 7.1. Hanya nama entitas yang diizinkan di sini — frasa penawaran tetap GAGAL, dan itu diuji di routes.test.ts."
     }
   ],
 
@@ -64,14 +73,7 @@
     "tersertifikasi ISO 9001"
   ],
 
-  "forbiddenFilenameFragments": [
-    "irata",
-    "sprat",
-    "petzl",
-    "irsm",
-    "iso9001",
-    "iso-9001"
-  ],
+  "forbiddenFilenameFragments": ["irata", "sprat", "petzl", "irsm", "iso9001", "iso-9001"],
 
   "imageExtensions": [".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg", ".gif"],
 

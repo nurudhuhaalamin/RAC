@@ -53,6 +53,15 @@ Dua cara yang benar, pilih salah satu:
 Jangan pernah menuliskan hash hasil tebakan atau hash yang belum final. Log ini jejak audit —
 rujukan yang menunjuk commit tidak ada lebih buruk daripada tidak ada rujukan sama sekali.
 
+### Kalau sesi melewati tengah malam
+
+Hook `check-worklog` memakai **tanggal hari ini**, sehingga sesi panjang yang menyeberangi
+tengah malam akan diblokir meski log kemarin sudah lengkap.
+
+Yang benar dilakukan: **buat file hari ini**, isi dengan ringkasan sesi dan penunjuk ke file
+kemarin. **Jangan memindahkan entri lama** — entri yang sudah ter-commit bersama kodenya
+kehilangan kaitannya kalau dipindah. Biarkan setiap entri di file tempat ia ditulis.
+
 ## Aturan tambahan
 
 - **JANGAN PERNAH** menulis nilai rahasia, kredensial, atau data pribadi nyata di log.

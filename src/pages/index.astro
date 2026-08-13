@@ -7,14 +7,31 @@ import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import Heading from '../components/ui/Heading.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
+import {
+  educationalOrganization,
+  graph,
+  localBusiness,
+  organization,
+  website,
+} from '../lib/seo/schema';
+import { organizationData, schemaContext } from '../lib/seo/site';
 
 export const prerender = false;
+
+const ctx = schemaContext(Astro.site);
+const jsonLd = graph([
+  organization(ctx, organizationData),
+  website(ctx),
+  educationalOrganization(ctx, organizationData),
+  localBusiness(ctx, organizationData),
+]);
 ---
 
 <BaseLayout
   title="Rope Access Center — Pelatihan & Sertifikasi Kerja Ketinggian"
   description="TODO: meta description beranda. Diisi di T-206 setelah positioning final."
   noindex
+  jsonLd={jsonLd}
 >
   <Section tone="inverse">
     <Container>

@@ -1,0 +1,113 @@
+---
+/**
+ * Metadata SEO untuk setiap halaman publik — PLAN Bab 8.2.
+ *
+ * Merender: title, description, canonical absolut, hreflang (id/en/x-default),
+ * Open Graph lengkap, Twitter Card, meta robots, dan JSON-LD.
+ *
+ * Dipasang lewat `<Fragment slot="head">` di BaseLayout.
+ */
+import { getAlternates, htmlLang, type Locale } from '../../lib/i18n';
+import { absoluteUrl } from '../../lib/seo/schema';
+import { SITE_NAME } from '../../lib/seo/site';
+import { warnMetaIssues } from '../../lib/seo/meta';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  /** JSON-LD siap pakai, hasil `graph([...])`. */
+  jsonLd?: string;
+  /** Override canonical. Default: URL halaman saat ini. */
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /**
+   * Padanan bahasa untuk rute DINAMIS yang tidak terdaftar di routes.ts
+   * (artikel, kursus, batch). Untuk rute statis, dihitung otomatis.
+   * Kalau padanan tidak ada, hreflang sengaja TIDAK dirender — lebih baik
+   * tidak ada hreflang daripada hreflang yang menunjuk 404.
+   */
+  alternates?: Array<{ locale: Locale; path: string }>;
+}
+
+const {
+  title,
+  description,
+  locale,
+  jsonLd,
+  canonical,
+  ogImage,
+  ogType = 'website',
+  noindex = false,
+  alternates,
+} = Astro.props as Props;
+
+const site = Astro.site?.toString() ?? 'https://example.com';
+const path = Astro.url.pathname;
+
+const canonicalUrl = canonical ?? absoluteUrl(path, site);
+const alts = alternates ?? getAlternates(path);
+
+const ogImageUrl = ogImage ? absoluteUrl(ogImage, site) : absoluteUrl('/og-default.png', site);
+
+// Peringatan panjang title/description hanya saat development.
+warnMetaIssues(path, title, description);
+
+const ogLocale = locale === 'id' ? 'id_ID' : 'en_US';
+---
+
+<link rel="canonical" href={canonicalUrl} />
+
+{
+  noindex ? (
+    <meta name="robots" content="noindex, nofollow" />
+  ) : (
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+  )
+}
+
+{
+  /*
+    hreflang hanya dirender kalau padanannya BENAR-BENAR ada.
+    x-default menunjuk versi Indonesia (PLAN Bab 8.2).
+  */
+}
+{
+  alts &&
+    alts.map((a) => (
+      <link rel="alternate" hreflang={htmlLang(a.locale)} href={absoluteUrl(a.path, site)} />
+    ))
+}
+{
+  alts && (
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={absoluteUrl(alts.find((a) => a.locale === 'id')?.path ?? '/', site)}
+    />
+  )
+}
+
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:site_name" content={SITE_NAME} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+{
+  /*
+    SATU <script> berisi @graph, bukan beberapa terpisah: node bisa saling
+    merujuk lewat @id dan Google memprosesnya sebagai satu kesatuan.
+    set:html aman di sini — isinya hasil JSON.stringify, bukan input pengguna.
+  */
+}
+{jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}

@@ -1,23 +1,29 @@
 ---
-// Halaman sementara T-101. Diganti seluruhnya oleh beranda sungguhan di T-206.
-import '../styles/global.css';
+/**
+ * Beranda ID — placeholder T-105. Diganti seluruhnya di T-206.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import Heading from '../components/ui/Heading.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+
 export const prerender = false;
 ---
 
-<!doctype html>
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rope Access Center — Fondasi Teknis</title>
-    <meta name="description" content="Kerangka proyek RAC. Halaman ini diganti di T-206." />
-    <meta name="robots" content="noindex" />
-  </head>
-  <body class="text-brand-900 bg-white">
-    <a class="skip-link" href="#main">Lewati ke konten</a>
-    <main id="main" class="mx-auto max-w-2xl p-8">
-      <h1 class="text-3xl font-bold">Rope Access Center</h1>
-      <p class="mt-4">Kerangka teknis berjalan. Halaman ini diganti di T-206.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="Rope Access Center — Pelatihan & Sertifikasi Kerja Ketinggian"
+  description="TODO: meta description beranda. Diisi di T-206 setelah positioning final."
+  noindex
+>
+  <Section tone="inverse">
+    <Container>
+      <Eyebrow tone="on-dark">Safe Access. Higher Standard.</Eyebrow>
+      <Heading level={1} size="5xl" tone="inverse" class="mt-3"> TODO: headline beranda </Heading>
+      <p class="text-brand-200 mt-6 max-w-2xl text-base">
+        Halaman ini masih kerangka. Isi sungguhan dibangun di T-206, setelah lembar verifikasi
+        statistik (D-13) dan status LSP (D-19) terisi di docs/FAKTA-BISNIS.md.
+      </p>
+    </Container>
+  </Section>
+</BaseLayout>

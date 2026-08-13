@@ -35,6 +35,10 @@
     {
       "path": "src/lib/i18n/dictionaries",
       "reason": "Kamus i18n memuat label halaman roadmap"
+    },
+    {
+      "path": "src/lib/i18n/routes.ts",
+      "reason": "Peta rute memuat SLUG halaman roadmap (`pelatihan/rencana-irata-sprat`), dan slug itu diwajibkan PLAN Bab 7.1. Hanya nama entitas yang diizinkan di sini — frasa penawaran tetap GAGAL, dan itu diuji di routes.test.ts."
     }
   ],
 

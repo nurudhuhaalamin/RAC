@@ -1,0 +1,257 @@
+---
+/**
+ * Header situs.
+ *
+ * Spesifikasi: DESIGN-SYSTEM Bab 6.1 + PLAN Bab 7.3 (A-04, A-08).
+ *  - Menu maksimal 6 item, Sertifikasi jadi submenu Pelatihan
+ *  - Dropdown terbuka pada hover DAN fokus keyboard, tertutup dengan Esc
+ *  - Mobile: drawer layar penuh, fokus terkunci, Esc menutup
+ *  - Pengalih bahasa wajib di header dan drawer
+ *
+ * Drawer memakai <dialog> bawaan browser: fokus terkunci dan Esc menutup
+ * tanpa satu baris JavaScript pun untuk itu. Menulis focus trap sendiri
+ * hampir selalu menghasilkan versi yang lebih buruk.
+ */
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { MAIN_NAV, getDictionary, routeLabel, routePath, type Locale } from '../../lib/i18n';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+const { locale, currentPath } = Astro.props as Props;
+const d = getDictionary(locale);
+
+/** Aktif kalau path saat ini adalah rute itu sendiri atau turunannya. */
+function isActive(path: string): boolean {
+  if (path === routePath('home', locale)) return currentPath === path;
+  return currentPath === path || currentPath.startsWith(path);
+}
+
+const nav = MAIN_NAV.map((item) => ({
+  key: item.key,
+  href: routePath(item.key, locale),
+  label: routeLabel(item.key, locale),
+  active: isActive(routePath(item.key, locale)),
+  children: (item.children ?? []).map((c) => ({
+    href: routePath(c, locale),
+    label: routeLabel(c, locale),
+  })),
+}));
+
+// TODO: nomor WhatsApp divisi training — docs/FAKTA-BISNIS.md Bab 3 (O-04).
+// Sengaja tidak diisi angka apa pun. Diganti data dari tabel `settings` di T-310.
+const whatsappHref = '#TODO-nomor-whatsapp-training';
+---
+
+<header class="bg-brand-900 text-neutral-0 sticky top-0 z-50">
+  <Container>
+    <div class="flex h-16 items-center justify-between gap-4 lg:h-20">
+      {/* Logo — wajib dibungkus <a> dengan aria-label (DESIGN-SYSTEM Bab 5.3) */}
+      <a
+        href={routePath('home', locale)}
+        aria-label={d.common.homeAriaLabel}
+        class="focus-visible:outline-accent-500 flex shrink-0 items-center focus-visible:outline-2 focus-visible:outline-offset-2"
+      >
+        {
+          /*
+          TODO: ganti dengan logo-horizontal-dark.svg dari T-100b.
+          Wordmark teks dipakai sementara — JANGAN diganti gambar generatif.
+        */
+        }
+        <span class="font-display text-neutral-0 text-xl tracking-tight">RAC</span>
+      </a>
+
+      {/* Menu desktop */}
+      <nav aria-label={d.nav.mainNavigation} class="hidden lg:block">
+        <ul class="flex items-center gap-1">
+          {
+            nav.map((item) => (
+              <li class="group relative">
+                <a
+                  href={item.href}
+                  aria-current={item.active ? 'page' : undefined}
+                  aria-haspopup={item.children.length > 0 ? 'true' : undefined}
+                  class:list={[
+                    'font-body relative inline-flex min-h-11 items-center px-3 text-sm font-semibold uppercase',
+                    'focus-visible:outline-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2',
+                    'after:bg-accent-500 after:absolute after:inset-x-3 after:bottom-2 after:h-0.5',
+                    item.active
+                      ? 'text-neutral-0 after:opacity-100'
+                      : 'text-brand-200 hover:text-neutral-0 after:opacity-0',
+                  ]}
+                >
+                  {item.label}
+                </a>
+
+                {item.children.length > 0 && (
+                  <ul
+                    class:list={[
+                      'bg-brand-800 border-border-inverse invisible absolute top-full left-0 min-w-56 rounded-md border py-2 opacity-0 shadow-lg',
+                      'group-hover:visible group-hover:opacity-100',
+                      'group-focus-within:visible group-focus-within:opacity-100',
+                      'transition-opacity motion-reduce:transition-none',
+                    ]}
+                  >
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          class="font-body text-brand-200 hover:bg-brand-700 hover:text-neutral-0 focus-visible:outline-accent-500 flex min-h-11 items-center px-4 text-sm focus-visible:outline-2 focus-visible:-outline-offset-2"
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <LanguageSwitcher
+          locale={locale}
+          currentPath={currentPath}
+          tone="on-dark"
+          class="hidden lg:flex"
+        />
+
+        <Button href={whatsappHref} variant="primary" size="sm" class="hidden sm:inline-flex">
+          {d.nav.ctaWhatsapp}
+        </Button>
+
+        {/* Pemicu drawer mobile */}
+        <button
+          type="button"
+          class="focus-visible:outline-accent-500 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
+          data-drawer-open
+          aria-controls="mobile-drawer"
+        >
+          <span class="sr-only">{d.common.openMenu}</span>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </Container>
+</header>
+
+{
+  /*
+  Drawer mobile.
+  <dialog> memberi fokus terkunci dan Esc-untuk-menutup dari browser, dan
+  mengembalikan fokus ke pemicunya saat ditutup — perilaku yang harus ditulis
+  puluhan baris JS kalau memakai <div>.
+*/
+}
+<dialog
+  id="mobile-drawer"
+  class="bg-brand-900 text-neutral-0 m-0 ml-auto h-dvh max-h-none w-full max-w-sm p-0 backdrop:bg-black/60"
+  aria-label={d.common.menu}
+>
+  <div class="flex h-full flex-col">
+    <div class="border-border-inverse flex h-16 items-center justify-between border-b px-4">
+      <span class="font-display text-lg">RAC</span>
+      <button
+        type="button"
+        class="focus-visible:outline-accent-500 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
+        data-drawer-close
+      >
+        <span class="sr-only">{d.common.closeMenu}</span>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav aria-label={d.nav.mainNavigation} class="flex-1 overflow-y-auto px-4 py-4">
+      <ul class="flex flex-col">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={item.active ? 'page' : undefined}
+                class:list={[
+                  'font-body focus-visible:outline-accent-500 flex min-h-12 items-center text-base font-semibold uppercase focus-visible:outline-2 focus-visible:-outline-offset-2',
+                  item.active ? 'text-accent-400' : 'text-neutral-0',
+                ]}
+              >
+                {item.label}
+              </a>
+              {item.children.length > 0 && (
+                <ul class="border-border-inverse mb-2 ml-3 border-l pl-3">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class="font-body text-brand-200 hover:text-neutral-0 focus-visible:outline-accent-500 flex min-h-11 items-center text-sm focus-visible:outline-2 focus-visible:-outline-offset-2"
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="border-border-inverse space-y-4 border-t px-4 py-4">
+      <Button href={whatsappHref} variant="primary" size="md" class="w-full">
+        {d.nav.ctaWhatsapp}
+      </Button>
+      <LanguageSwitcher locale={locale} currentPath={currentPath} tone="on-dark" />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Satu-satunya JS yang dibutuhkan drawer: membuka dan menutup.
+  // Fokus terkunci, Esc, dan pengembalian fokus ditangani <dialog> itu sendiri.
+  const drawer = document.getElementById('mobile-drawer');
+  if (drawer instanceof HTMLDialogElement) {
+    document.querySelector('[data-drawer-open]')?.addEventListener('click', () => {
+      drawer.showModal();
+      document.body.style.overflow = 'hidden';
+    });
+
+    const close = () => {
+      drawer.close();
+    };
+    drawer.querySelector('[data-drawer-close]')?.addEventListener('click', close);
+
+    // Klik pada backdrop (di luar isi drawer) menutup.
+    drawer.addEventListener('click', (e) => {
+      if (e.target === drawer) close();
+    });
+
+    drawer.addEventListener('close', () => {
+      document.body.style.overflow = '';
+    });
+  }
+</script>

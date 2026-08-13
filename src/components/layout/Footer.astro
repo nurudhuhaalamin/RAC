@@ -1,0 +1,144 @@
+---
+/**
+ * Footer situs — DESIGN-SYSTEM Bab 6.9.
+ *
+ * Koreksi terhadap mockup:
+ *  - Tahun hak cipta DINAMIS (mockup menulis 2024 — akan basi)
+ *  - Pengalih bahasa ditambahkan (A-08; mockup belum punya)
+ *  - Disclaimer dan Kebijakan Cookie masuk bilah bawah (PLAN Bab 7.2)
+ *  - TIDAK ada E-Learning (D-17)
+ */
+import Container from '../ui/Container.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import {
+  LEGAL_NAV,
+  MAIN_NAV,
+  getDictionary,
+  routeLabel,
+  routePath,
+  type Locale,
+} from '../../lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const d = getDictionary(locale);
+
+const year = new Date().getFullYear();
+
+const serviceItem = MAIN_NAV.find((i) => i.key === 'services');
+
+const columns = [
+  {
+    heading: routeLabel('training', locale),
+    links: [
+      { href: routePath('training', locale), label: routeLabel('training', locale) },
+      { href: routePath('schedule', locale), label: routeLabel('schedule', locale) },
+      { href: routePath('trainingRoadmap', locale), label: routeLabel('trainingRoadmap', locale) },
+    ],
+  },
+  {
+    heading: routeLabel('services', locale),
+    links: (serviceItem?.children ?? []).map((k) => ({
+      href: routePath(k, locale),
+      label: routeLabel(k, locale),
+    })),
+  },
+  {
+    heading: d.nav.company,
+    links: [
+      { href: routePath('about', locale), label: routeLabel('about', locale) },
+      { href: routePath('instructors', locale), label: routeLabel('instructors', locale) },
+      { href: routePath('facilities', locale), label: routeLabel('facilities', locale) },
+      { href: routePath('gallery', locale), label: routeLabel('gallery', locale) },
+      { href: routePath('articles', locale), label: routeLabel('articles', locale) },
+    ],
+  },
+];
+---
+
+<footer class="bg-brand-900 text-neutral-0 mt-auto">
+  <Container>
+    <div class="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
+      {/* Brand */}
+      <div class="lg:col-span-2">
+        <span class="font-display text-2xl tracking-tight">RAC</span>
+        <p class="text-brand-200 mt-2 max-w-xs text-sm">{d.footer.tagline}</p>
+
+        <dl class="mt-6 space-y-3 text-sm">
+          <div>
+            <dt class="text-brand-200 text-xs uppercase">{d.footer.address}</dt>
+            {/* TODO: alamat kantor — docs/FAKTA-BISNIS.md Bab 1 (O-03) */}
+            <dd class="text-neutral-0">TODO: alamat kantor</dd>
+          </div>
+          <div>
+            <dt class="text-brand-200 text-xs uppercase">{d.footer.phone}</dt>
+            {/* TODO: telepon kantor — docs/FAKTA-BISNIS.md Bab 3 */}
+            <dd class="text-neutral-0">TODO: telepon</dd>
+          </div>
+          <div>
+            <dt class="text-brand-200 text-xs uppercase">{d.footer.email}</dt>
+            {/* TODO: email umum — docs/FAKTA-BISNIS.md Bab 3 */}
+            <dd class="text-neutral-0">TODO: email</dd>
+          </div>
+          <div>
+            <dt class="text-brand-200 text-xs uppercase">{d.footer.openingHours}</dt>
+            {/* TODO: jam operasional — docs/FAKTA-BISNIS.md Bab 1 */}
+            <dd class="text-neutral-0">TODO: jam operasional</dd>
+          </div>
+        </dl>
+      </div>
+
+      {/* Kolom navigasi */}
+      {
+        columns.map((col) => (
+          <nav aria-label={col.heading}>
+            <h2 class="font-display text-neutral-0 text-sm">{col.heading}</h2>
+            <ul class="mt-4 space-y-1">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="font-body text-brand-200 hover:text-neutral-0 focus-visible:outline-accent-500 inline-flex min-h-11 items-center text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    {/* Bilah bawah */}
+    <div
+      class="border-border-inverse flex flex-col gap-4 border-t py-6 lg:flex-row lg:items-center lg:justify-between"
+    >
+      <p class="text-brand-200 text-xs">
+        &copy; {year}
+        {d.footer.copyright}
+      </p>
+
+      <nav aria-label={d.nav.legal}>
+        <ul class="flex flex-wrap gap-x-4 gap-y-1">
+          {
+            LEGAL_NAV.map((k) => (
+              <li>
+                <a
+                  href={routePath(k, locale)}
+                  class="font-body text-brand-200 hover:text-neutral-0 focus-visible:outline-accent-500 inline-flex min-h-11 items-center text-xs focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {routeLabel(k, locale)}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <LanguageSwitcher locale={locale} currentPath={Astro.url.pathname} tone="on-dark" />
+    </div>
+  </Container>
+</footer>

@@ -1,0 +1,29 @@
+---
+/**
+ * Home page EN — T-105 placeholder. Fully replaced in T-206.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import Heading from '../../components/ui/Heading.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+
+export const prerender = false;
+---
+
+<BaseLayout
+  title="Rope Access Center — Work-at-Height Training & Certification"
+  description="TODO: home page meta description. Written in T-206 once positioning is final."
+  noindex
+>
+  <Section tone="inverse">
+    <Container>
+      <Eyebrow tone="on-dark">Safe Access. Higher Standard.</Eyebrow>
+      <Heading level={1} size="5xl" tone="inverse" class="mt-3">TODO: home headline</Heading>
+      <p class="text-brand-200 mt-6 max-w-2xl text-base">
+        This page is still a skeleton. Real content is built in T-206, once the statistics
+        verification sheet (D-13) and LSP status (D-19) are filled in docs/FAKTA-BISNIS.md.
+      </p>
+    </Container>
+  </Section>
+</BaseLayout>

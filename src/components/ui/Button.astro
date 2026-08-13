@@ -1,0 +1,66 @@
+---
+/**
+ * Tombol — merender <a> atau <button> sesuai ada tidaknya href.
+ *
+ * Aturan yang ditegakkan:
+ *  - Titik sentuh minimal 44x44 px (DESIGN-SYSTEM Bab 7)
+ *  - Cincin fokus tidak boleh dihapus
+ *  - Lebar TIDAK pernah tetap — teks Indonesia 15-20% lebih panjang dari
+ *    Inggris, jadi padding yang menentukan lebar, bukan `width` (Bab 8)
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'secondary-inverse' | 'ghost' | 'whatsapp';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  class: className = '',
+  ...rest
+} = Astro.props as Props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-wide ' +
+  'rounded-md transition-colors duration-150 ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 ' +
+  'disabled:opacity-50 disabled:pointer-events-none';
+
+const variants = {
+  primary: 'bg-accent-500 text-neutral-0 hover:bg-accent-600 active:bg-accent-700',
+  secondary: 'border-2 border-brand-900 text-brand-900 hover:bg-brand-900 hover:text-neutral-0',
+  'secondary-inverse':
+    'border-2 border-neutral-0 text-neutral-0 hover:bg-neutral-0 hover:text-brand-900',
+  ghost: 'text-brand-900 hover:bg-surface-subtle',
+  whatsapp: 'bg-whatsapp text-brand-950 hover:bg-whatsapp-hover',
+} as const;
+
+// min-h-11 = 44px. Padding menentukan lebar, tidak ada `w-*`.
+const sizes = {
+  sm: 'min-h-11 px-4 text-sm',
+  md: 'min-h-12 px-6 text-sm',
+  lg: 'min-h-14 px-8 text-base',
+} as const;
+
+const classes = [base, variants[variant], sizes[size], className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} aria-disabled={disabled ? 'true' : undefined} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}

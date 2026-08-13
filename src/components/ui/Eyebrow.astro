@@ -1,0 +1,27 @@
+---
+/**
+ * Label kecil di atas judul.
+ *
+ * ⚠️ ATURAN A-05 — persyaratan aksesibilitas, bukan preferensi.
+ * Di latar GELAP wajib accent-400. accent-500 (#E30613) di atas navy hanya
+ * mencapai 3,51:1 dan GAGAL WCAG AA untuk teks normal.
+ * Bukti: src/lib/utils/contrast.test.ts
+ */
+interface Props {
+  tone: 'on-light' | 'on-dark';
+  as?: 'p' | 'span' | 'div';
+  class?: string;
+}
+const { tone, as: Tag = 'p', class: className = '' } = Astro.props as Props;
+
+const tones = {
+  'on-light': 'text-accent-500',
+  'on-dark': 'text-accent-400',
+} as const;
+---
+
+<Tag
+  class:list={['font-body text-xs font-bold tracking-[0.15em] uppercase', tones[tone], className]}
+>
+  <slot />
+</Tag>

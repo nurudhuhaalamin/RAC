@@ -1,0 +1,58 @@
+---
+/**
+ * Input teks.
+ *
+ * Batas memakai border-strong (A-13): border-default hanya 1,47:1 di atas putih
+ * dan tidak cukup untuk mengenali batas kontrol (WCAG 2.1 SC 1.4.11).
+ */
+interface Props {
+  id: string;
+  name: string;
+  type?: 'text' | 'email' | 'tel' | 'url' | 'search' | 'number';
+  value?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  invalid?: boolean;
+  describedBy?: string;
+  autocomplete?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  id,
+  name,
+  type = 'text',
+  value,
+  placeholder,
+  required = false,
+  disabled = false,
+  invalid = false,
+  describedBy,
+  autocomplete,
+  class: className = '',
+  ...rest
+} = Astro.props as Props;
+---
+
+<input
+  id={id}
+  name={name}
+  type={type}
+  value={value}
+  placeholder={placeholder}
+  required={required}
+  disabled={disabled}
+  autocomplete={autocomplete}
+  aria-invalid={invalid ? 'true' : undefined}
+  aria-describedby={describedBy}
+  class:list={[
+    'font-body text-brand-900 min-h-11 w-full rounded-md border px-3 py-2 text-base',
+    'placeholder:text-neutral-400',
+    'focus-visible:outline-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2',
+    'disabled:bg-surface-subtle disabled:cursor-not-allowed',
+    invalid ? 'border-danger border-2' : 'border-border-strong',
+    className,
+  ]}
+  {...rest}
+/>

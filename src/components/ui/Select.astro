@@ -1,0 +1,54 @@
+---
+interface Props {
+  id: string;
+  name: string;
+  options: Array<{ value: string; label: string }>;
+  value?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  invalid?: boolean;
+  describedBy?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  id,
+  name,
+  options,
+  value,
+  placeholder,
+  required = false,
+  disabled = false,
+  invalid = false,
+  describedBy,
+  class: className = '',
+  ...rest
+} = Astro.props as Props;
+---
+
+<select
+  id={id}
+  name={name}
+  required={required}
+  disabled={disabled}
+  aria-invalid={invalid ? 'true' : undefined}
+  aria-describedby={describedBy}
+  class:list={[
+    'font-body text-brand-900 min-h-11 w-full rounded-md border bg-white px-3 py-2 text-base',
+    'focus-visible:outline-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2',
+    'disabled:bg-surface-subtle disabled:cursor-not-allowed',
+    invalid ? 'border-danger border-2' : 'border-border-strong',
+    className,
+  ]}
+  {...rest}
+>
+  {placeholder && <option value="">{placeholder}</option>}
+  {
+    options.map((o) => (
+      <option value={o.value} selected={o.value === value}>
+        {o.label}
+      </option>
+    ))
+  }
+</select>

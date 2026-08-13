@@ -34,6 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: production
+    # Dilewati sampai kredensial Cloudflare dipasang. Setel repository variable
+    # ENABLE_CLOUDFLARE_DEPLOY = true untuk mengaktifkan.
+    if: vars.ENABLE_CLOUDFLARE_DEPLOY == 'true'
 
     steps:
       - uses: actions/checkout@v4

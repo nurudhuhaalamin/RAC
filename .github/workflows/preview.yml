@@ -18,9 +18,19 @@ jobs:
     name: Deploy preview
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Fork tidak punya akses ke secrets. Tanpa penjaga ini, setiap PR dari
-    # fork akan gagal dengan error kredensial yang membingungkan.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Dua penjaga:
+    #  1. Fork tidak punya akses ke secrets — tanpa ini setiap PR dari fork
+    #     gagal dengan error kredensial yang membingungkan.
+    #  2. Selama kredensial Cloudflare belum dipasang, job ini DILEWATI, bukan
+    #     dibiarkan merah. Check yang selalu gagal mengajari orang mengabaikan
+    #     check — lalu check yang benar-benar penting ikut diabaikan.
+    #
+    # Aktifkan dengan menyetel repository variable:
+    #   Settings > Secrets and variables > Actions > Variables
+    #   ENABLE_CLOUDFLARE_DEPLOY = true
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      vars.ENABLE_CLOUDFLARE_DEPLOY == 'true'
 
     steps:
       - uses: actions/checkout@v4

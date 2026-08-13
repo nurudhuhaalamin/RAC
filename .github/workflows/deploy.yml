@@ -1,0 +1,67 @@
+name: Deploy
+
+# ⚠️ WORKFLOW INI BELUM PERNAH DIJALANKAN.
+#
+# Tidak ada kredensial Cloudflare di lingkungan pengembangan, sehingga isinya
+# ditulis berdasarkan dokumentasi dan BELUM diverifikasi terhadap akun sungguhan.
+# Jalankan pertama kali dengan mengawasi log-nya, jangan dianggap terbukti.
+#
+# Prasyarat yang HARUS Anda siapkan lebih dulu:
+#   1. Isi id asli D1/KV/R2 di wrangler.toml (sekarang masih placeholder)
+#   2. Pasang GitHub Secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+#   3. Pasang Cloudflare Secrets: TURNSTILE_SECRET_KEY, RESEND_API_KEY,
+#      IP_HASH_SALT  (lewat `wrangler secret put`, BUKAN di file ini)
+#   4. Terapkan migration ke production SECARA MANUAL:
+#        wrangler d1 migrations apply DB --remote
+#      Workflow ini sengaja TIDAK menjalankannya — migration production adalah
+#      keputusan manusia (CLAUDE.md aturan 1).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ke Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Gerbang yang sama dengan CI. Deploy tidak pernah melewati verifikasi,
+      # sekalipun push langsung ke main.
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Validator konten (D-05)
+        run: pnpm check:content
+      - name: Unit test
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

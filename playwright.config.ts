@@ -1,6 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
+import { existsSync } from 'node:fs';
 
-const PORT = 4321;
+/**
+ * Sebagian lingkungan kontainer sudah menyediakan Chromium di jalur tetap dan
+ * memblokir unduhan browser. Kalau binary itu ada, pakai; kalau tidak, biarkan
+ * Playwright memakai instalasinya sendiri — yang terjadi di runner CI.
+ *
+ * Tanpa penanganan ini, versi @playwright/test yang tidak sama dengan build
+ * browser yang tersedia akan gagal dengan "Executable doesn't exist".
+ */
+const PREINSTALLED_CHROMIUM = '/opt/pw-browsers/chromium';
+const executablePath = existsSync(PREINSTALLED_CHROMIUM) ? PREINSTALLED_CHROMIUM : undefined;
+
+// Port `wrangler dev`. E2E dijalankan terhadap runtime Workers yang
+// SESUNGGUHNYA, bukan dev server Vite — cara ini menangkap masalah tingkat
+// adapter (binding, header, SSR) yang disembunyikan dev server.
+const PORT = 8788;
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -15,13 +30,19 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile', use: { ...devices['Pixel 7'] } },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], launchOptions: { executablePath } },
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['Pixel 7'], launchOptions: { executablePath } },
+    },
   ],
   webServer: {
-    command: `pnpm dev --port ${PORT}`,
-    port: PORT,
+    command: `pnpm build && pnpm preview`,
+    url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 180_000,
   },
 });
